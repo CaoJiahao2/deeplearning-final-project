@@ -4,3 +4,5 @@ transformers>=5.12
 accelerate
 Pillow
 tqdm
+nltk
+pycocoevalcap
