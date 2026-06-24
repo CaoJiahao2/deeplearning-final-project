@@ -1,4 +1,35 @@
+# Data
 /data
+
+# Model checkpoints
 /checkpoint
-/annotations
+
+# Generated annotations (keep only final versions)
+/annotations/train_captions_v[1-6].jsonl
+/annotations/val_captions_v6.jsonl
+
+# Python
 *.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+/tmp/
+*.tmp

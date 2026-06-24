@@ -30,7 +30,7 @@ from models import (
     collate_fn,
     compute_metrics,
 )
-from models.vocab import build_vocab_from_jsonl
+from models.vocab import build_vocab_from_jsonl, PAD_IDX
 
 
 # ---------------------------------------------------------------------------
@@ -51,7 +51,11 @@ def parse_args():
     # Model
     p.add_argument("--arch", type=str, default="baseline", choices=["baseline", "attention"],
                     help="Model architecture")
-    p.add_argument("--backbone", type=str, default="resnet50", choices=["resnet50", "resnet101"])
+    p.add_argument("--backbone", type=str, default="resnet50", choices=["resnet50", "resnet101", "clip"])
+    p.add_argument("--clip_path", type=str, default=None,
+                    help="Path to local CLIP checkpoint (required when backbone=clip)")
+    p.add_argument("--norm_type", type=str, default="imagenet", choices=["imagenet", "clip"],
+                    help="Image normalization type (clip when using CLIP backbone)")
     p.add_argument("--embed_dim", type=int, default=512)
     p.add_argument("--hidden_dim", type=int, default=512)
     p.add_argument("--num_layers", type=int, default=1)
@@ -71,6 +75,9 @@ def parse_args():
     p.add_argument("--grad_clip", type=float, default=5.0)
     p.add_argument("--max_caption_len", type=int, default=64)
     p.add_argument("--min_word_freq", type=int, default=1)
+    p.add_argument("--pretrained_vocab", type=str, default=None,
+                    help="Pretrained tokenizer name (e.g. bert-base-uncased). "
+                         "If set, overrides --min_word_freq and uses subword tokenization.")
     p.add_argument("--num_workers", type=int, default=4)
     p.add_argument("--seed", type=int, default=42)
 
@@ -92,6 +99,12 @@ def parse_args():
                     choices=["greedy", "beam"])
     p.add_argument("--beam_size", type=int, default=5)
 
+    # Early stopping
+    p.add_argument("--early_stopping_patience", type=int, default=10,
+                    help="Stop training if val_loss doesn't improve for N epochs")
+    p.add_argument("--repetition_penalty", type=float, default=1.2,
+                    help="Penalty for repeated tokens during beam search (>1.0 to reduce repetition)")
+
     # Resume training
     p.add_argument("--resume", action="store_true",
                     help="Resume training from checkpoint")
@@ -108,7 +121,8 @@ def parse_args():
 def load_data(args) -> Tuple[DataLoader, Optional[DataLoader], Vocabulary]:
     """Load annotations, build vocabulary, create DataLoaders."""
     # Build vocabulary from training annotations
-    vocab = build_vocab_from_jsonl(args.annotation, min_freq=args.min_word_freq)
+    vocab = build_vocab_from_jsonl(args.annotation, min_freq=args.min_word_freq,
+                                   pretrained=args.pretrained_vocab)
 
     # Training dataset
     train_dataset = CaptionDataset(
@@ -117,6 +131,7 @@ def load_data(args) -> Tuple[DataLoader, Optional[DataLoader], Vocabulary]:
         vocab=vocab,
         max_caption_len=args.max_caption_len,
         is_train=True,
+        norm_type=getattr(args, 'norm_type', 'imagenet'),
     )
     train_loader = DataLoader(
         train_dataset,
@@ -137,6 +152,7 @@ def load_data(args) -> Tuple[DataLoader, Optional[DataLoader], Vocabulary]:
             vocab=vocab,
             max_caption_len=args.max_caption_len,
             is_train=False,
+            norm_type=getattr(args, 'norm_type', 'imagenet'),
         )
         val_loader = DataLoader(
             val_dataset,
@@ -340,6 +356,77 @@ def setup_logging(output_dir: str, arch: str, resume: bool = False) -> logging.L
     return logger
 
 
+def _init_embedding_from_pretrained(model: CaptionModel, vocab, device, logger):
+    """Initialize decoder embedding with pretrained tokenizer weights.
+
+    Loads only the embedding matrix (not the full model), projects to embed_dim if needed.
+    """
+    import torch.nn as nn
+    from transformers import AutoModel
+
+    tokenizer_name = vocab.tokenizer.name_or_path
+    logger.info(f"[Embedding] Loading pretrained embedding from {tokenizer_name} ...")
+
+    # Load only the embedding weights (not the full model)
+    try:
+        # Try loading just the embedding from safetensors/pytorch_model
+        from transformers import AutoConfig
+        config = AutoConfig.from_pretrained(tokenizer_name)
+        embedding = nn.Embedding(config.vocab_size, config.hidden_size)
+        # Load weights into embedding only
+        from huggingface_hub import hf_hub_download
+        import os
+
+        # Try safetensors first, then pytorch_model
+        try:
+            from safetensors.torch import load_file
+            weight_path = hf_hub_download(tokenizer_name, "model.safetensors")
+            state = load_file(weight_path)
+        except Exception:
+            weight_path = hf_hub_download(tokenizer_name, "pytorch_model.bin")
+            state = torch.load(weight_path, map_location="cpu", weights_only=True)
+
+        embedding.weight.data.copy_(state["embeddings.word_embeddings.weight"])
+        pretrained_emb = embedding.weight.data.clone()
+        del state, embedding
+        logger.info(f"[Embedding] Loaded from weights file")
+    except Exception as e:
+        # Fallback: load full model
+        logger.info(f"[Embedding] Fallback: loading full model ({e})")
+        pretrained_model = AutoModel.from_pretrained(tokenizer_name)
+        pretrained_emb = pretrained_model.embeddings.word_embeddings.weight.data.clone()
+        del pretrained_model
+
+    pretrained_dim = pretrained_emb.size(1)  # e.g. 768 for bert-base
+    target_dim = model.decoder.embedding.weight.size(1)  # e.g. 512
+    target_vocab = model.decoder.embedding.weight.size(0)
+
+    # Truncate or pad vocabulary dimension
+    if pretrained_emb.size(0) > target_vocab:
+        pretrained_emb = pretrained_emb[:target_vocab]
+    elif pretrained_emb.size(0) < target_vocab:
+        pad = torch.zeros(target_vocab - pretrained_emb.size(0), pretrained_dim)
+        pretrained_emb = torch.cat([pretrained_emb, pad], dim=0)
+
+    # Project dimension if needed (e.g. 768 -> 512)
+    if pretrained_dim != target_dim:
+        projection = nn.Linear(pretrained_dim, target_dim, bias=False)
+        nn.init.xavier_uniform_(projection.weight)
+        with torch.no_grad():
+            projected_emb = projection(pretrained_emb)  # [vocab_size, target_dim]
+        del projection
+    else:
+        projected_emb = pretrained_emb
+
+    # Copy into decoder embedding
+    model.decoder.embedding.weight.data.copy_(projected_emb.to(device))
+    logger.info(f"[Embedding] Initialized: {pretrained_dim}d -> {target_dim}d, "
+                f"vocab {pretrained_emb.size(0)}/{target_vocab}")
+
+    del pretrained_emb, projected_emb
+    torch.cuda.empty_cache()
+
+
 def main():
     args = parse_args()
 
@@ -387,12 +474,17 @@ def main():
         attention_dim=args.attention_dim,
         fine_tune_layers=args.fine_tune,
         pretrained=True,
+        clip_path=getattr(args, 'clip_path', None),
     ).to(device)
+
+    # Initialize embedding from pretrained tokenizer if using one
+    if args.pretrained_vocab and vocab._pretrained:
+        _init_embedding_from_pretrained(model, vocab, device, logger)
 
     # Count parameters
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    logger.info(f"[Model] {args.arch}: {total_params:,} total params, {trainable_params:,} trainable")
+    logger.info(f"[Model] {args.arch} backbone={args.backbone}: {total_params:,} total params, {trainable_params:,} trainable")
     logger.info(f"[Model] Encoder params: {sum(p.numel() for p in model.encoder.parameters()):,}")
     logger.info(f"[Model] Decoder params: {sum(p.numel() for p in model.decoder.parameters()):,}")
 
@@ -414,7 +506,7 @@ def main():
 
         if val_loader is not None:
             scores = evaluate_metrics(model, val_loader, vocab, device,
-                                       strategy=args.decode_strategy, beam_size=args.beam_size)
+                                       strategy="greedy", beam_size=args.beam_size)
             logger.info("="*60)
             logger.info(f"  Evaluation Results ({args.arch})")
             logger.info("="*60)
@@ -435,7 +527,7 @@ def main():
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="min", factor=args.lr_factor, patience=args.lr_patience
     )
-    criterion = nn.CrossEntropyLoss(ignore_index=Vocabulary.PAD_IDX)
+    criterion = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
 
     # Mixed precision scaler
     scaler = torch.amp.GradScaler("cuda") if args.fp16 and torch.cuda.is_available() else None
@@ -485,7 +577,11 @@ def main():
 
     logger.info(f"[Train] Starting training: {args.epochs} epochs, arch={args.arch}")
     logger.info(f"[Train] Batch size: {args.batch_size}, LR: {args.lr}, Grad clip: {args.grad_clip}")
+    logger.info(f"[Train] Early stopping patience: {args.early_stopping_patience}")
     logger.info("-"*60)
+
+    # Early stopping state
+    patience_counter = 0
 
     for epoch in range(start_epoch, args.epochs + 1):
         t0 = time.time()
@@ -523,11 +619,11 @@ def main():
 
         # Evaluate metrics periodically
         metric_scores = {}
-        if val_loader is not None and (epoch % 5 == 0 or epoch == args.epochs):
+        if val_loader is not None and (epoch % 10 == 0 or epoch == args.epochs):
             logger.info("  Generating captions for evaluation...")
             metric_scores = evaluate_metrics(
                 model, val_loader, vocab, device,
-                strategy=args.decode_strategy, beam_size=args.beam_size
+                strategy="greedy", beam_size=args.beam_size
             )
             for k, v in metric_scores.items():
                 logger.info(f"    {k}: {v:.4f}")
@@ -551,7 +647,13 @@ def main():
             best_val_loss = current_loss
             best_path = os.path.join(out, f"{args.arch}_best.pth")
             torch.save(model.state_dict(), best_path)
+            patience_counter = 0  # Reset early stopping counter
             logger.info(f"  -> Saved best model (loss={current_loss:.4f})")
+        else:
+            patience_counter += 1
+            if patience_counter >= args.early_stopping_patience:
+                logger.info(f"  -> Early stopping at epoch {epoch} (no improvement for {args.early_stopping_patience} epochs)")
+                break
 
         if current_score > best_metric_score and metric_scores:
             best_metric_score = current_score
@@ -584,7 +686,7 @@ def main():
     if val_loader is not None:
         final_scores = evaluate_metrics(
             model, val_loader, vocab, device,
-            strategy=args.decode_strategy, beam_size=args.beam_size
+            strategy="greedy", beam_size=args.beam_size
         )
         for metric, value in final_scores.items():
             logger.info(f"  {metric:10s}: {value:.4f}")

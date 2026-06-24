@@ -31,12 +31,13 @@ class CaptionDataset(Dataset):
         max_caption_len: int = 64,
         transform: Optional[transforms.Compose] = None,
         is_train: bool = True,
+        norm_type: str = "imagenet",
     ):
         self.image_dir = image_dir
         self.vocab = vocab
         self.max_caption_len = max_caption_len
         self.is_train = is_train
-        self.transform = transform or self._default_transform(is_train)
+        self.transform = transform or self._default_transform(is_train, norm_type=norm_type)
 
         # Load annotations
         self.annotations: List[Dict] = []
@@ -50,23 +51,29 @@ class CaptionDataset(Dataset):
         print(f"[Dataset] Loaded {len(self.annotations)} samples from {annotation_path}")
 
     @staticmethod
-    def _default_transform(is_train: bool) -> transforms.Compose:
+    def _default_transform(is_train: bool, norm_type: str = "imagenet") -> transforms.Compose:
+        # Normalization stats
+        if norm_type == "clip":
+            mean = [0.48145466, 0.4578275, 0.40821073]
+            std = [0.26862954, 0.26130258, 0.27577711]
+        else:  # imagenet
+            mean = [0.485, 0.456, 0.406]
+            std = [0.229, 0.224, 0.225]
+
         if is_train:
             return transforms.Compose([
                 transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
                 transforms.RandomHorizontalFlip(),
                 transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
                 transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225]),
+                transforms.Normalize(mean=mean, std=std),
             ])
         else:
             return transforms.Compose([
                 transforms.Resize(256),
                 transforms.CenterCrop(224),
                 transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225]),
+                transforms.Normalize(mean=mean, std=std),
             ])
 
     def __len__(self) -> int:
@@ -100,6 +107,6 @@ def collate_fn(batch: List[Tuple]) -> Tuple[torch.Tensor, torch.Tensor, torch.Te
     return images, captions, caption_lens, image_ids
 
 
-def get_transforms(is_train: bool = True) -> transforms.Compose:
+def get_transforms(is_train: bool = True, norm_type: str = "imagenet") -> transforms.Compose:
     """Get standard image transforms."""
-    return CaptionDataset._default_transform(is_train)
+    return CaptionDataset._default_transform(is_train, norm_type=norm_type)

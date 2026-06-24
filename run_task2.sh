@@ -27,6 +27,7 @@ GPU="${GPU:-0}"
 EPOCHS=60          # 总 epoch 数
 BATCH_SIZE=64
 LR=1e-3
+VOCAB="bert-base-uncased"  # 使用 BERT 子词分词
 DECODE_STRATEGY="greedy"
 
 MODE="${1:-both}"
@@ -65,6 +66,7 @@ train_model() {
         --fine_tune layer4 \
         --max_caption_len 64 \
         --decode_strategy "$DECODE_STRATEGY" \
+        --pretrained_vocab "$VOCAB" \
         --fp16 \
         $extra_args
 
@@ -95,6 +97,7 @@ eval_model() {
         --output_dir "$out" \
         --gpu 0 \
         --decode_strategy "$DECODE_STRATEGY" \
+        --pretrained_vocab "$VOCAB" \
         --beam_size 5
 
     echo ""

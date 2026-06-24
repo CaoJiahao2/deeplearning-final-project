@@ -1,0 +1,149 @@
+{
+  "greedy": {
+    "config": {
+      "strategy": "greedy",
+      "beam_size": 1,
+      "repetition_penalty": 1.0,
+      "label": "greedy"
+    },
+    "captions": {
+      "2002.jpg": "a male, resemblingic perches stands on a stone ledge, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a backdrop of natural light, casting subtle shadows on the ground. the scene is bathed in natural light, highlighting the texture of the trees and the texture of the trees and the texture",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, its feathers reaching towards a large brown enclosure. the setting appears to be a zoo or wildlife area, with sunlight that casts soft shadows on the ground. sunlight filters through the sunlight, highlighting the textures of the ground and the other of trees.",
+      "2004.jpg": "a hand holds a clear plastic bag with a green pot sits on a white surface, featuring a small pot of spicy ingredients. the setting appears to be a casual dining with white, with green leaves and a small bowl of fruit and a small pot of the setting.",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with a tall residential buildings with tall residential buildings line the horizon. the buildings feature tall residential structures with tall residential buildings line the horizon, adding to the urban structures. tall residential structures line the horizon, adding to the urban structures. the citysca",
+      "2006.jpg": "a fluffy cat cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorfultively around, a black basket with black bars, a pair of black head",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a soft texture and a dark metal bars.",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow, their white snowing and a small tree in the background. the scene is set in a snow - covered area, with tall trees and a few people in the snow - covered trees. the scene is bathed in soft, diffused light, highlighting the quiet",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by visitors walking across the scene. the scene is set in a park - like area, with distant trees and trees in the background. visitors walk along the path, adding depth to the serene atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom, blooming bloom against a cloudy sky, with clusters of pink blossoms and pink blossoms. the blossoms are in full bloom, some pausing to admire the blossoms, while others stroll leisurely on the pathways.",
+      "2011.jpg": "a winding road road unfolds under a clear blue sky, where people stroll and ride pink flowering trees. in the background, modern buildings with pink and white blossoms, are seen walking under the clear sky. the scene is lively yet serene, with soft natural light enhancing the quiet atmosphere of the road and the distant hills"
+    },
+    "avg_time": 0.30964686870574953
+  },
+  "beam3_rp1.0": {
+    "config": {
+      "strategy": "beam",
+      "beam_size": 3,
+      "repetition_penalty": 1.0,
+      "label": "beam3_rp1.0"
+    },
+    "captions": {
+      "2002.jpg": "a long, tree perches gracefully on a grassy field, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a backdrop of natural light filtering through, natural light filtering through the trees, casting dappled shadows on the ground. the scene is bathed in natural daylight, highlighting the texture of the",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, surrounded by dry trees and scattered brown. the setting appears to be a zoo or wildlife area, where sunlight that casts a soft light over the scene. sunlight casts soft shadows, highlighting the textures of the rocks and the texture of the rocks.",
+      "2004.jpg": "a hand holds a clear plastic bag with a green pot sits on a white surface, featuring a small pot of spicy ingredients. a white spoon sits atop the left side, while the other rolls of meat sits in the background. the scene is softly lit, highlighting the vibrant colors of the food and the clarity of the plates",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with a tall residential buildings with tall residential buildings line the horizon. the buildings feature tall residential structures with tall residential buildings line the horizon, adding to the urban structures. tall residential structures line the horizon, adding to the urban urban landscape. tall residential",
+      "2006.jpg": "a fluffy ginger cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorfultively around, a blackphonesphones, and the cat ' s fur is",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a soft texture to the cat ' s fur",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow - covered trees, with a snow - covered trees in the background. the scene is set against a backdrop of distant trees under a soft, diffused light over the scene. the scene is bathed in soft, diffused light, highlighting the quiet textures of the",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by lush greenery. the scene is set against a backdrop of bare trees and trees, casting soft shadows across the ground. the scene is bathed in soft, diffused light, creating a serene and picturesque atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom dominates the scene, their branches heavy with clusters of pink blossoms against a backdrop of blooming pink blossoms. the blossoms are in full bloom, some pausing to admire the springtime setting.",
+      "2011.jpg": "a scenic view of a winding road road unfolds under an overcast sky, with vibrant pink and white flowering trees under an overcast sky. the scene is set against a backdrop of lush greenery and modern hills, under a clear sky. the scene is lively yet serene, with soft natural light enhancing the quiet"
+    },
+    "avg_time": 0.7866748571395874
+  },
+  "beam5_rp1.0": {
+    "config": {
+      "strategy": "beam",
+      "beam_size": 5,
+      "repetition_penalty": 1.0,
+      "label": "beam5_rp1.0"
+    },
+    "captions": {
+      "2002.jpg": "a long, tree perches gracefully on a grassy field, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a natural sky, with sunlight filtering through the foliage, casting soft shadows on the ground. the scene is bathed in natural light, highlighting the texture of the trees and the texture of the",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, surrounded by dry trees and scattered brown. the setting appears to be a zoo or wildlife area, with sunlight that casts a soft light over the scene. sunlight casts soft shadows, highlighting the textures of the rocks and the texture of the rocks.",
+      "2004.jpg": "a hand holds a clear plastic bag with a green pot sits on a white surface, featuring a small pot of spicy ingredients. the setting appears to be a casual dining area with soft, diffused lighting that highlights the texture of the food and the clarity of a meal. the setting appears to be a casual dining environment with",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with a tall residential buildings with tall residential buildings line the horizon. the buildings feature tall residential structures with tall residential buildings line the horizon, adding to the urban structures. tall residential structures line the horizon, adding to the urban urban landscape. tall residential",
+      "2006.jpg": "a fluffy ginger cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorful graphics, a pair of black headphones, and a black basket with a",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a red lid and a jar with a red",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow - covered trees, with a snow - covered trees in the background. the scene is set against a backdrop of distant trees under a soft, overcast sky. the scene is bathed in soft, diffused light, highlighting the quiet textures of the ground and the",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by lush greenery. the scene is set against a backdrop of bare trees and trees, casting soft shadows across the ground. the scene is bathed in soft, diffused light, creating a serene and picturesque atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom dominates the scene, their branches heavy with clusters of pink blossoms against a backdrop of blooming pink blossoms. the blossoms are in full bloom, some pausing to admire the springtime setting.",
+      "2011.jpg": "a scenic view of a winding road road unfolds under an overcast sky, with vibrant pink and white trees under an overcast sky. the scene is set against a backdrop of lush greenery and modern hills under a clear blue sky. the scene is lively yet serene, with soft natural light enhancing the quiet atmosphere"
+    },
+    "avg_time": 1.2011362075805665
+  },
+  "beam3_rp1.2": {
+    "config": {
+      "strategy": "beam",
+      "beam_size": 3,
+      "repetition_penalty": 1.2,
+      "label": "beam3_rp1.2"
+    },
+    "captions": {
+      "2002.jpg": "a long, tree perches gracefully on a grassy field, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a backdrop of natural light, casting subtle shadows on the ground. the scene is bathed in natural daylight, highlighting the texture of the trees and the vibrant colors of the trees. the scene",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, surrounded by dry trees and scattered brown. the setting appears to be a zoo or wildlife area, where sunlight that casts a soft light over the scene. sunlight casts soft shadows, highlighting the textures of the rocks and the texture of the rocks.",
+      "2004.jpg": "a hand holds a clear plastic bag with a green pot sits on a white surface, featuring a small pot of spicy ingredients. the setting appears to be a casual dining area with soft, diffused lighting that highlights the vibrant colors of the food and the clarity of a meal. the setting appears to be a casual dining or",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with a tall residential buildings with tall residential buildings line the horizon. the buildings feature tall residential structures with tall residential buildings line the horizon, adding to the urban structures. tall residential structures line the horizon, adding to the urban urban landscape. tall residential",
+      "2006.jpg": "a fluffy ginger cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorfultively around, a blackphonesphones, and the cat ' s fur is",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a red lid and a jar with a red",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow - covered trees, with a snow - covered trees in the background. the scene is set against a backdrop of distant trees under a soft, diffused light over the scene. the ground is blanketed in snow, creating a serene and picturesque atmosphere.",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by lush greenery. the scene is set against a backdrop of bare trees and trees, casting soft shadows across the ground. the scene is bathed in soft, diffused light, creating a serene and picturesque atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom dominates the scene, their branches heavy with clusters of pink blossoms against a backdrop of blooming pink blossoms. the blossoms are in full bloom, some pausing to admire the springtime setting.",
+      "2011.jpg": "a scenic view of a winding road road unfolds under an overcast sky, with vibrant pink and white flowering trees under an overcast sky. the scene is set against a backdrop of lush greenery and modern hills, under a clear sky. the scene is lively yet serene, with soft natural light enhancing the quiet"
+    },
+    "avg_time": 5.632963800430298
+  },
+  "beam5_rp1.2": {
+    "config": {
+      "strategy": "beam",
+      "beam_size": 5,
+      "repetition_penalty": 1.2,
+      "label": "beam5_rp1.2"
+    },
+    "captions": {
+      "2002.jpg": "a long, tree perches gracefully on a grassy field, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a natural sky, with sunlight filtering through the foliage, casting soft shadows on the ground. the scene is bathed in natural light, highlighting the texture of the trees and the vibrant colors of",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, surrounded by dry trees and scattered brown. the setting appears to be a zoo or wildlife area, with sunlight that casts a soft light over the scene. sunlight casts soft shadows, highlighting the textures of the rocks and the texture of the rocks.",
+      "2004.jpg": "a hand holds a clear plastic bag with a green pot sits on a white surface, alongside a small pot of spicy ingredients. the setting appears to be a casual dining area with soft, diffused lighting that highlights the vibrant colors of the food and the clarity of a meal. the setting appears to be a casual dining or",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with their silhouettes of the buildings and tall residential buildings. tall residential buildings line the horizon, their silhouettes contrasting against the fading light. tall residential buildings line the urban landscape, adding to the urban urban landscape. tall residential buildings line the urban",
+      "2006.jpg": "a fluffy tabby cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorful graphics, a pair of black headphones, and a black basket with",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed slightly forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a red lid and a jar with a",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow - covered trees, with a snow - covered trees in the background. the scene is set against a backdrop of distant trees under a soft, overcast sky. the scene is bathed in soft, diffused light, highlighting the quiet textures of the ground and the",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by lush greenery. the scene is set against a backdrop of bare trees and trees, casting soft shadows across the ground. the scene is bathed in soft, diffused light, creating a serene and picturesque atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom dominates the scene, their branches heavy with clusters of pink blossoms against a backdrop of blooming pink blossoms. the blossoms are in full bloom, some pausing to admire the springtime setting.",
+      "2011.jpg": "a scenic view of a winding road road unfolds under an overcast sky, with vibrant pink and white trees under an overcast sky. the scene is set against a backdrop of lush greenery and modern hills under a clear blue sky. the scene is lively yet serene, with soft natural light enhancing the quiet atmosphere"
+    },
+    "avg_time": 8.415201473236085
+  },
+  "beam5_rp1.3": {
+    "config": {
+      "strategy": "beam",
+      "beam_size": 5,
+      "repetition_penalty": 1.3,
+      "label": "beam5_rp1.3"
+    },
+    "captions": {
+      "2002.jpg": "a long, tree perches gracefully on a grassy field, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a natural sky, with sunlight filtering through the foliage, casting soft shadows on the ground. the scene is bathed in natural light, highlighting the texture of the trees and the vibrant colors of",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, surrounded by dry trees and scattered brown. the setting appears to be a zoo or wildlife area, where sunlight that casts a soft light over the scene. sunlight casts soft shadows, highlighting the textures of the rocks and the texture of the rocks.",
+      "2004.jpg": "a hand holds a clear plastic bag with a green pot sits on a white surface, alongside a small pot of spicy ingredients. the setting appears to be a casual dining area with soft, diffused lighting that highlights the vibrant colors of the food and the clarity of the plates. a white table is visible in the background,",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with their silhouettes of the buildings and tall residential buildings. tall residential buildings line the horizon, their silhouettes contrasting against the fading light. tall residential buildings line the urban landscape, adding to the urban urban landscape. tall residential buildings line the urban",
+      "2006.jpg": "a fluffy tabby cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorful graphics, a pair of black headphones, and a black basket with",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed slightly forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a red lid and a jar with a",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow - covered trees, with a snow - covered trees in the background. the scene is set against a backdrop of distant trees under a soft, overcast sky. the scene is bathed in soft, diffused light, highlighting the quiet textures of the ground and the",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by lush greenery. the scene is set against a backdrop of bare trees and trees, casting soft shadows across the ground. the scene is bathed in soft, diffused light, creating a serene and picturesque atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom dominates the scene, their branches heavy with clusters of pink blossoms against a backdrop of blooming pink blossoms. the blossoms are in full bloom, some pausing to admire the springtime setting.",
+      "2011.jpg": "a scenic view of a winding road road unfolds under an overcast sky, with vibrant pink and white trees under an overcast sky. the scene is set against a backdrop of lush greenery and modern hills under a clear blue sky. the scene is lively yet serene, with soft natural light enhancing the quiet atmosphere"
+    },
+    "avg_time": 9.14529128074646
+  },
+  "beam10_rp1.3": {
+    "config": {
+      "strategy": "beam",
+      "beam_size": 10,
+      "repetition_penalty": 1.3,
+      "label": "beam10_rp1.3"
+    },
+    "captions": {
+      "2002.jpg": "a young tree perches gracefully on a grassy field, its feathers adorned with its feathers reflecting the sunlight. the scene is set against a natural sky, with sunlight filtering through the foliage, casting soft shadows on the ground. the scene is bathed in natural light, highlighting the texture of the trees and the vibrant colors of the",
+      "2003.jpg": "a brown tabby cat stands on a rugged enclosure, surrounded by dry trees and scattered brown. the setting appears to be a zoo or wildlife area, where sunlight that casts a soft light over the scene. sunlight casts soft shadows, highlighting the textures of the rocks and the texture of the rocks.",
+      "2004.jpg": "a hand holds a clear plastic spoon labeled \" is arranged on a white surface, featuring a small pot of spicy ingredients. the setting appears to be a casual dining area with soft, diffused lighting that highlights the vibrant colors of the food and the clarity of the plates. a white table is visible in the background, suggesting",
+      "2005.jpg": "a tall residentialscape unfolds under a soft, cloudy sky, with their silhouettes of the buildings and tall residential buildings. tall residential buildings line the horizon, their silhouettes contrasting against the fading light. tall residential buildings line the urban landscape, adding to the urban urban landscape. tall residential buildings line the urban",
+      "2006.jpg": "a fluffy ginger cat sits attentively on a wooden desk, its gaze directed slightly upward. the room is softly lit by natural light streaming through the window, highlighting the cat ' s fur and the objects around it, including a laptop displaying colorfultively around, adding a touch of bananas. the room is softly lit by",
+      "2007.jpg": "a fluffy cat with folded ears sits on a wooden desk, its gaze fixed slightly forward. the cat ' s fur is a mix of gray and white, with a soft texture to the cat ' s fur. the cat ' s fur is a mix of black and white, with a red lid and a jar with a",
+      "2008.jpg": "a snow - covered view of a snow - covered in snow - covered trees, with a snow - covered trees in the background. the scene is set against a backdrop of distant trees under a soft, overcast sky. the scene is bathed in soft, diffused light, highlighting the quiet textures of the ground and the",
+      "2009.jpg": "a traditional chinese pavilion with a tiled roof stands prominently amidst a serene park, surrounded by lush greenery. the scene is set against a backdrop of bare trees and trees, casting soft shadows across the ground. the scene is bathed in soft, diffused light, creating a serene and picturesque atmosphere.",
+      "2010.jpg": "a magnolia tree in full bloom dominates the scene, their branches heavy with clusters of pink blossoms against a backdrop of blooming pink blossoms. the blossoms are in full bloom, some pausing to admire the springtime setting.",
+      "2011.jpg": "a scenic view of a winding road road unfolds under an overcast sky, with vibrant pink and white trees under an overcast sky. the scene is set against a backdrop of lush greenery and modern hills under a clear blue sky. the scene is lively yet serene, with soft natural light enhancing the quiet atmosphere"
+    },
+    "avg_time": 17.858784675598145
+  }
+}

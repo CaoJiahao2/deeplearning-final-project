@@ -10,8 +10,9 @@ import torch.nn as nn
 from typing import Dict, List, Optional, Tuple
 
 from .encoder import CNNEncoder
+from .clip_encoder import CLIPEncoder
 from .decoder import LSTMDecoder, AttentionLSTMDecoder
-from .vocab import Vocabulary
+from .vocab import Vocabulary, PAD_IDX, START_IDX, END_IDX
 
 
 class CaptionModel(nn.Module):
@@ -42,6 +43,7 @@ class CaptionModel(nn.Module):
         attention_dim: int = 256,
         fine_tune_layers: str = "layer4",
         pretrained: bool = True,
+        clip_path: str = None,
     ):
         super().__init__()
         self.arch = arch
@@ -49,12 +51,21 @@ class CaptionModel(nn.Module):
         self.hidden_dim = hidden_dim
 
         # Shared encoder
-        self.encoder = CNNEncoder(
-            backbone=backbone,
-            embed_dim=embed_dim,
-            pretrained=pretrained,
-            fine_tune_layers=fine_tune_layers,
-        )
+        if backbone == "clip":
+            if clip_path is None:
+                raise ValueError("clip_path required when backbone='clip'")
+            self.encoder = CLIPEncoder(
+                clip_path=clip_path,
+                embed_dim=embed_dim,
+                freeze=True,
+            )
+        else:
+            self.encoder = CNNEncoder(
+                backbone=backbone,
+                embed_dim=embed_dim,
+                pretrained=pretrained,
+                fine_tune_layers=fine_tune_layers,
+            )
 
         if arch == "baseline":
             self.decoder = LSTMDecoder(
@@ -107,6 +118,7 @@ class CaptionModel(nn.Module):
         strategy: str = "greedy",
         temperature: float = 1.0,
         beam_size: int = 3,
+        repetition_penalty: float = 1.2,
     ) -> List[List[int]]:
         """Generate captions for images (inference).
 
@@ -116,6 +128,7 @@ class CaptionModel(nn.Module):
             strategy: 'greedy' or 'beam'
             temperature: sampling temperature (for sampling strategy)
             beam_size: beam width (for beam search)
+            repetition_penalty: penalty for repeated tokens (>1.0 reduces repetition)
 
         Returns:
             list of token index sequences
@@ -123,7 +136,7 @@ class CaptionModel(nn.Module):
         if strategy == "greedy":
             return self._greedy_decode(images, max_len)
         elif strategy == "beam":
-            return self._beam_search(images, max_len, beam_size)
+            return self._beam_search(images, max_len, beam_size, repetition_penalty)
         else:
             raise ValueError(f"Unknown strategy: {strategy}")
 
@@ -144,7 +157,7 @@ class CaptionModel(nn.Module):
             features = None
 
         # Start with <start> token
-        input_token = torch.full((batch_size,), Vocabulary.START_IDX, dtype=torch.long, device=device)
+        input_token = torch.full((batch_size,), START_IDX, dtype=torch.long, device=device)
 
         all_sequences = [[] for _ in range(batch_size)]
         finished = torch.zeros(batch_size, dtype=torch.bool, device=device)
@@ -162,7 +175,7 @@ class CaptionModel(nn.Module):
                 if not finished[i]:
                     token = next_token[i].item()
                     all_sequences[i].append(token)
-                    if token == Vocabulary.END_IDX:
+                    if token == END_IDX:
                         finished[i] = True
 
             if finished.all():
@@ -173,8 +186,9 @@ class CaptionModel(nn.Module):
         return all_sequences
 
     @torch.no_grad()
-    def _beam_search(self, images: torch.Tensor, max_len: int, beam_size: int) -> List[List[int]]:
-        """Beam search decoding (per-image)."""
+    def _beam_search(self, images: torch.Tensor, max_len: int, beam_size: int,
+                     repetition_penalty: float = 1.0) -> List[List[int]]:
+        """Beam search decoding with repetition penalty."""
         self.eval()
         device = images.device
         batch_size = images.size(0)
@@ -194,13 +208,13 @@ class CaptionModel(nn.Module):
                 features = None
 
             # Beam: list of (score, token_sequence, hidden_state)
-            beams = [(0.0, [Vocabulary.START_IDX], hidden)]
+            beams = [(0.0, [START_IDX], hidden)]
             completed = []
 
             for _ in range(max_len):
                 all_candidates = []
                 for score, seq, h in beams:
-                    if seq[-1] == Vocabulary.END_IDX:
+                    if seq[-1] == END_IDX:
                         completed.append((score, seq))
                         continue
 
@@ -211,6 +225,16 @@ class CaptionModel(nn.Module):
                         logits, new_h = self.decoder.forward_step(input_token, h, spatial_features)
 
                     log_probs = torch.log_softmax(logits.squeeze(0), dim=0)
+
+                    # Apply repetition penalty
+                    if repetition_penalty != 1.0:
+                        seen = set(seq[1:])  # Skip START_IDX
+                        for token_id in seen:
+                            if log_probs[token_id] > 0:
+                                log_probs[token_id] /= repetition_penalty
+                            else:
+                                log_probs[token_id] *= repetition_penalty
+
                     top_scores, top_indices = log_probs.topk(beam_size)
 
                     for j in range(beam_size):
@@ -234,6 +258,6 @@ class CaptionModel(nn.Module):
                 best = max(completed, key=lambda x: x[0] / max(len(x[1]), 1))
                 all_sequences.append(best[1])
             else:
-                all_sequences.append([Vocabulary.START_IDX, Vocabulary.END_IDX])
+                all_sequences.append([START_IDX, END_IDX])
 
         return all_sequences

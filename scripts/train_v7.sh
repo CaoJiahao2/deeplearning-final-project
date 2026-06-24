@@ -33,6 +33,7 @@ GPU="${GPU:-0}"
 EPOCHS=60          # 总 epoch 数（续训时从上次结束继续到此数）
 BATCH_SIZE=64
 LR=1e-3
+VOCAB="bert-base-uncased"  # 使用 BERT 子词分词
 ARCH="${1:-both}"
 
 # ── 训练函数 ──
@@ -68,6 +69,7 @@ train_model() {
         --fine_tune layer4 \
         --max_caption_len 64 \
         --decode_strategy greedy \
+        --pretrained_vocab "$VOCAB" \
         --fp16 \
         $extra_args
 
@@ -98,6 +100,7 @@ eval_model() {
         --output_dir "$output_dir" \
         --gpu 0 \
         --decode_strategy greedy \
+        --pretrained_vocab "$VOCAB" \
         --beam_size 5
 
     echo ""

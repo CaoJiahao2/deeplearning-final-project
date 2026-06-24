@@ -25,7 +25,6 @@ from torchvision import transforms
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models import CaptionModel, Vocabulary
-from models.vocab import Vocabulary as Vocab
 
 
 def get_transform():
@@ -86,6 +85,7 @@ def generate_caption(
     device: torch.device,
     strategy: str = "greedy",
     beam_size: int = 5,
+    repetition_penalty: float = 1.2,
 ) -> str:
     """单张图片推理。"""
     image = Image.open(image_path).convert("RGB")
@@ -93,7 +93,8 @@ def generate_caption(
 
     with torch.no_grad():
         sequences = model.generate(
-            tensor, strategy=strategy, beam_size=beam_size
+            tensor, strategy=strategy, beam_size=beam_size,
+            repetition_penalty=repetition_penalty
         )
 
     tokens = sequences[0]
@@ -115,6 +116,8 @@ def main():
     parser.add_argument("--gpu", type=int, default=0)
     parser.add_argument("--strategy", type=str, default="greedy", choices=["greedy", "beam"])
     parser.add_argument("--beam_size", type=int, default=5)
+    parser.add_argument("--repetition_penalty", type=float, default=1.2,
+                        help="Repetition penalty for beam search (>1.0 reduces repetition)")
     parser.add_argument("--output", type=str, default=None, help="Save results to JSON file")
     args = parser.parse_args()
 
@@ -142,7 +145,8 @@ def main():
     for img_path in image_paths:
         caption = generate_caption(
             model, vocab, img_path, transform, device,
-            strategy=args.strategy, beam_size=args.beam_size
+            strategy=args.strategy, beam_size=args.beam_size,
+            repetition_penalty=args.repetition_penalty
         )
         img_id = os.path.basename(img_path)
         results[img_id] = caption
