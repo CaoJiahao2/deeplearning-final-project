@@ -75,11 +75,11 @@ def get_image_paths(data_dir, split):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", default="/home/turing1/jhcao/final-project/checkpoint/Qwen3.5-9B")
-    parser.add_argument("--data_dir", default="/mnt/jhcao/final-project/data")
+    parser.add_argument("--model_path", default="checkpoint/Qwen3.5-9B")
+    parser.add_argument("--data_dir", default="data")
     parser.add_argument("--split", default="train")
     parser.add_argument("--num_images", type=int, default=-1)
-    parser.add_argument("--output_dir", default="/mnt/jhcao/final-project/annotations")
+    parser.add_argument("--output_dir", default="annotations")
     parser.add_argument("--gpu", type=int, default=0, help="GPU device index")
     parser.add_argument("--shard_offset", type=int, default=0, help="Start from this image index")
     parser.add_argument("--shard_count", type=int, default=-1, help="Number of images to process (-1=all remaining)")

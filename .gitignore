@@ -1,8 +1,15 @@
 # Data
 /data
 
-# Model checkpoints
+# Model checkpoints (too large for git)
 /checkpoint
+
+# Paper files (not part of the codebase)
+/paper
+/paper-latex
+
+# Claude session
+CLAUDE.md
 
 # Generated annotations (keep only final versions)
 /annotations/train_captions_v[1-6].jsonl
@@ -33,3 +40,6 @@ Thumbs.db
 # Temporary files
 /tmp/
 *.tmp
+
+# Results (generated, not source code)
+/results

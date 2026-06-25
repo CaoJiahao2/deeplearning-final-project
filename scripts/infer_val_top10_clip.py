@@ -23,7 +23,7 @@ def main():
     vocab = Vocabulary.from_pretrained("bert-base-uncased")
 
     # 加载模型 (CLIP ViT-L/14 + Attention LSTM)
-    clip_path = "/home/turing1/jhcao/final-project/checkpoint/clip-vit-B-14"
+    clip_path = "checkpoint/pretrained/clip-vit-large-patch14"
     model = CaptionModel(
         arch="attention",
         backbone="clip",

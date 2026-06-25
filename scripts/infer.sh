@@ -18,7 +18,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PYTHON="/home/turing1/anaconda3/envs/n_sam3/bin/python"
+PYTHON="python"
 SCRIPT="scripts/inference.py"
 
 INPUT="${1:-data/val/2002.jpg}"

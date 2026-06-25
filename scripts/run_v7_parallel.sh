@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 DATA_DIR="$PROJECT_DIR/data"
 OUTPUT_DIR="$PROJECT_DIR/annotations"
-PYTHON="/home/turing1/anaconda3/envs/n_sam3/bin/python"
+PYTHON="python"
 SCRIPT="$SCRIPT_DIR/generate_v6_caption_only.py"   # 已更新为 v7 prompt
 
 mkdir -p "$OUTPUT_DIR"

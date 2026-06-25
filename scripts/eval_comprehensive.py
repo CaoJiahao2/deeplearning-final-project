@@ -53,7 +53,7 @@ def compute_clipscore(images: List[str], hyps: List[str]) -> Dict[str, float]:
     """
     from transformers import CLIPProcessor, CLIPModel
 
-    clip_path = "/home/turing1/jhcao/final-project/checkpoint/clip-vit-B-14"
+    clip_path = "checkpoint/pretrained/clip-vit-large-patch14"
     clip_model = CLIPModel.from_pretrained(clip_path).cuda().eval()
     clip_processor = CLIPProcessor.from_pretrained(clip_path)
 
@@ -263,7 +263,7 @@ def main():
     device = torch.device(f"cuda:{args.gpu}")
 
     # Paths
-    CLIP_PATH = "/home/turing1/jhcao/final-project/checkpoint/clip-vit-B-14"
+    CLIP_PATH = "checkpoint/pretrained/clip-vit-large-patch14"
     VAL_DIR = "data/val"
     ANNOTATION = "annotations/train_captions_v7.jsonl"
 

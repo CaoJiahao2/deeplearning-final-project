@@ -1,8 +1,12 @@
 torch>=2.0
 torchvision
-transformers>=5.12
+transformers>=4.12
 accelerate
 Pillow
 tqdm
 nltk
 pycocoevalcap
+bert-score
+sentencepiece
+tensorboard
+safetensors

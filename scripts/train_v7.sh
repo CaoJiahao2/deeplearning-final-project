@@ -22,7 +22,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PYTHON="/home/turing1/anaconda3/envs/n_sam3/bin/python"
+PYTHON="python"
 SCRIPT="train.py"
 
 # ── 默认参数 ──

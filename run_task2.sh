@@ -15,7 +15,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-PYTHON="/home/turing1/anaconda3/envs/n_sam3/bin/python"
+PYTHON="python"
 
 # Default paths
 ANNOTATION="annotations/train_captions_v7.jsonl"

@@ -5,8 +5,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-PYTHON="/home/turing1/anaconda3/envs/n_sam3/bin/python"
-CLIP_PATH="/home/turing1/jhcao/final-project/checkpoint/clip-vit-B-14"
+PYTHON="python"
+CLIP_PATH="checkpoint/pretrained/clip-vit-large-patch14"
 GPU=0
 
 echo "============================================================"

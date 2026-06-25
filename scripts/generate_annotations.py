@@ -553,10 +553,10 @@ ALL_VERSIONS = ["v1", "v2", "v3", "v4", "v5", "v6", "v7"]
 def main():
     parser = argparse.ArgumentParser(description="Task 1: Multi-modal annotation generation")
     parser.add_argument("--model_path", type=str,
-                        default="/home/turing1/jhcao/final-project/checkpoint/Qwen3.5-9B",
+                        default="checkpoint/Qwen3.5-9B",
                         help="Model checkpoint path")
     parser.add_argument("--data_dir", type=str,
-                        default="/mnt/jhcao/final-project/data",
+                        default="data",
                         help="Data root directory")
     parser.add_argument("--split", type=str, default="train",
                         choices=["train", "val"], help="Dataset split")
@@ -565,7 +565,7 @@ def main():
     parser.add_argument("--prompt_version", type=str, default="v1",
                         choices=ALL_VERSIONS, help="Prompt version")
     parser.add_argument("--output_dir", type=str,
-                        default="/mnt/jhcao/final-project/annotations",
+                        default="annotations",
                         help="Output directory")
     parser.add_argument("--resume", action="store_true",
                         help="Resume from existing output")

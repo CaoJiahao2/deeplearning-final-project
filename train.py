@@ -41,7 +41,7 @@ def parse_args():
     p = argparse.ArgumentParser(description="Image Captioning Training")
 
     # Data paths
-    p.add_argument("--annotation", type=str, default="annotations/train_captions_v3.jsonl",
+    p.add_argument("--annotation", type=str, default="annotations/train_captions_v7.jsonl",
                     help="Path to training annotation JSONL")
     p.add_argument("--val_annotation", type=str, default=None,
                     help="Path to validation annotation JSONL (if available)")
